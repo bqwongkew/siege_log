@@ -1,10 +1,10 @@
 # Work with Python 3.6
 import discord
 import sqlite3
+from TableRenderer import *
 
 conn = sqlite3.connect("test.db")
 c = conn.cursor()
-
 
 class Report:
     def __init__(self, map_name, result):
@@ -34,7 +34,6 @@ maps = ["bank", "border", "chalet", "club", "coastline", "consulate", "hereford"
         "skyscraper", "theme park"]
 results = ["win", "loss", "draw"]
 
-
 def process_report(content):
     items = content.split(' ')
     if len(items) != 3:
@@ -50,6 +49,20 @@ def process_report(content):
     add_report(report)
     return "You {} on {}".format(report.result, report.map)
 
+def getName(user):
+    return  f"{user.name}#{user.discriminator}"
+
+queryWhitelist = ["Dazer#7130"]
+def process_query(author, content: str):
+    if (getName(author) not in queryWhitelist):
+        return f"{author.name} is not authorized"
+
+    sql = content[len('!query'):]
+    print(f"{author.name} is executing {sql}")
+
+    renderer = TableRenderer()
+    renderer.populate(c.execute(sql))
+    return renderer.render()
 
 def add_report(report):
     item = (report.map, report.result)
@@ -85,12 +98,17 @@ async def on_message(message):
             '!report [map] [result] to add a match \n' \
             '!maps to get a list of maps \n' \
             '!info to get a list of all results'
+        if getName(message.author) in queryWhitelist:
+            m = m + ' \n!query [sql] to run arbitrary sql'
 
     if message.content.startswith('!report'):
         m = process_report(message.content)
 
     if message.content.startswith('!maps'):
         m = ", ".join(maps)
+
+    if message.content.startswith('!query'):
+        m = process_query(message.author, message.content)
 
     if message.content.startswith('!info'):
         m = ""

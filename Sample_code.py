@@ -1,7 +1,12 @@
 # Work with Python 3.6
-import discord
 import sqlite3
-from TableRenderer import *
+import discord
+from discord import *
+from handlers.QueryHandler import *
+from handlers.MapHandler import *
+from handlers.InfoHandler import *
+
+User.get_full_name = lambda self: f"{self.name}#{self.discriminator}"
 
 conn = sqlite3.connect("test.db")
 c = conn.cursor()
@@ -24,7 +29,6 @@ class MatchResult:
     def match(self, result):
         return result.lower() in self.list
 
-
 MatchResult.win = MatchResult("won", "win", "victory")
 MatchResult.lose = MatchResult("lost", "lose", "loss", "defeat")
 MatchResult.draw = MatchResult("drew", "draw")
@@ -33,6 +37,8 @@ MatchResult.outcomes = [MatchResult.win, MatchResult.lose, MatchResult.draw]
 maps = ["bank", "border", "chalet", "club", "coastline", "consulate", "hereford", "kafe", "oregon",
         "skyscraper", "theme park"]
 results = ["win", "loss", "draw"]
+
+handlers = [QueryHandler(conn, ["Dazer#7130"]), InfoHandler(conn), MapHandler(maps)]
 
 def process_report(content):
     items = content.split(' ')
@@ -49,26 +55,10 @@ def process_report(content):
     add_report(report)
     return "You {} on {}".format(report.result, report.map)
 
-def getName(user):
-    return  f"{user.name}#{user.discriminator}"
-
-queryWhitelist = ["Dazer#7130"]
-def process_query(author, content: str):
-    if (getName(author) not in queryWhitelist):
-        return f"{author.name} is not authorized"
-
-    sql = content[len('!query'):]
-    print(f"{author.name} is executing {sql}")
-
-    renderer = TableRenderer()
-    renderer.populate(c.execute(sql))
-    return renderer.render()
-
 def add_report(report):
     item = (report.map, report.result)
     c.execute("INSERT INTO games VALUES(?, ?)", item)
     conn.commit()
-
 
 def update_game(result, sum):
     (win, loss, draw) = sum
@@ -89,41 +79,34 @@ client = discord.Client()
 @client.event
 async def on_message(message):
     # we do not want the bot to reply to itself
-    m = "unknown error"
     if message.author == client.user:
         return
 
-    if message.content.startswith('!help'):
-        m = 'commands are: \n' \
-            '!report [map] [result] to add a match \n' \
-            '!maps to get a list of maps \n' \
-            '!info to get a list of all results'
-        if getName(message.author) in queryWhitelist:
-            m = m + ' \n!query [sql] to run arbitrary sql'
+    try:
+        result = "Couldn't process message"
+        if message.content.startswith('!help'):
+            result = 'commands are: \n' \
+                '!report [map] [result] to add a match'\
 
-    if message.content.startswith('!report'):
-        m = process_report(message.content)
+            for handler in handlers:
+                infoLine = handler.get_info(message)
+                if (infoLine is not None):
+                    result = result + '\n' + infoLine
 
-    if message.content.startswith('!maps'):
-        m = ", ".join(maps)
+        if message.content.startswith('!report'):
+            result = process_report(message.content)
 
-    if message.content.startswith('!query'):
-        m = process_query(message.author, message.content)
+        for handler in handlers:
+            if handler.can_handle(message):
+                result = handler.process(message)
+                break;
 
-    if message.content.startswith('!info'):
-        m = ""
-        dict = {}
-        for row in c.execute("SELECT * FROM games"):
-            (map, result) = row
-            games = (0, 0, 0) if map not in dict else dict[map]
-            # print(f"{map} {map in dict} {games}")
-            dict[map] = update_game(result, games)
-        for (map, sums) in dict.items():
-            (win, loss, draw) = sums
-            percent = 100*win/(win+loss) if (win+loss) > 0 else 0
-            m += f"{map}: {win} Wins, {loss} Losses. {percent}% \n"
+        await client.send_message(message.channel, result)
 
-    await client.send_message(message.channel, m)
+    except:
+        await client.send_message(message.channel, "Encountered exception while processing message")
+        raise
+
 
 
 @client.event

@@ -20,8 +20,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Create_dB.py" />
+    <Compile Include="handlers\InfoHandler.py" />
+    <Compile Include="handlers\MapHandler.py" />
+    <Compile Include="handlers\QueryHandler.py" />
     <Compile Include="TableRenderer.py" />
     <Compile Include="Sample_code.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="handlers\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

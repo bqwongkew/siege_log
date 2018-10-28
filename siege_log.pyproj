@@ -20,14 +20,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Create_dB.py" />
-    <Compile Include="handlers\InfoHandler.py" />
-    <Compile Include="handlers\MapHandler.py" />
-    <Compile Include="handlers\QueryHandler.py" />
+    <Compile Include="Handlers\HelpHandler.py" />
+    <Compile Include="Handlers\InfoHandler.py" />
+    <Compile Include="Handlers\ReportHandler.py" />
+    <Compile Include="Handlers\MapHandler.py" />
+    <Compile Include="Handlers\QueryHandler.py" />
+    <Compile Include="MapData.py" />
     <Compile Include="TableRenderer.py" />
     <Compile Include="Sample_code.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="handlers\" />
+    <Folder Include="C:\Users\Hawkwood\Code\siege_log\Handlers\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

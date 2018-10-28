@@ -9,14 +9,14 @@ class InfoHandler:
         return message.content.startswith('!info')
 
     def get_info(self, message):
-        return '!info to get a list of all results'
+        return '!info to get a list of all map results'
 
     def process(self, message):
         sql = '''
         SELECT
             map AS Map,
-            SUM(result = 'won') AS Wins,
-            SUM(result='lose') AS Losses
+            SUM(result='won') AS Wins,
+            SUM(result='lost') AS Losses
         FROM games
         GROUP BY map'''
 

@@ -5,6 +5,7 @@ __pycache__/
 
 # VS files
 .vs
+*.user
 
 # C extensions
 *.so

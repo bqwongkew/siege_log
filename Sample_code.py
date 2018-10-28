@@ -5,6 +5,7 @@ from discord import *
 from handlers.QueryHandler import *
 from handlers.MapHandler import *
 from handlers.InfoHandler import *
+from MapData import *
 
 User.get_full_name = lambda self: f"{self.name}#{self.discriminator}"
 
@@ -38,7 +39,7 @@ maps = ["bank", "border", "chalet", "club", "coastline", "consulate", "hereford"
         "skyscraper", "theme park"]
 results = ["win", "loss", "draw"]
 
-handlers = [QueryHandler(conn, ["Dazer#7130"]), InfoHandler(conn), MapHandler(maps)]
+handlers = [QueryHandler(conn, ["Dazer#7130"]), InfoHandler(conn), MapHandler(MapData.maps)]
 
 def process_report(content):
     items = content.split(' ')

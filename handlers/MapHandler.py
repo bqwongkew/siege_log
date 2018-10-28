@@ -1,7 +1,7 @@
 
 class MapHandler:
     def __init__(self, maps):
-        self.maps = maps
+        self.maps = list(map(lambda map_item: map_item.name, maps))
 
     def can_handle(self, message):
         return message.content.startswith('!maps')

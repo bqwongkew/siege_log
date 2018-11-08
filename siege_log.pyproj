@@ -22,8 +22,9 @@
     <Compile Include="Create_dB.py" />
     <Compile Include="Handlers\HelpHandler.py" />
     <Compile Include="Handlers\InfoHandler.py" />
+    <Compile Include="Handlers\MapListHandler.py" />
     <Compile Include="Handlers\ReportHandler.py" />
-    <Compile Include="Handlers\MapHandler.py" />
+    <Compile Include="Handlers\MapNotesHandler.py" />
     <Compile Include="Handlers\QueryHandler.py" />
     <Compile Include="MapData.py" />
     <Compile Include="TableRenderer.py" />
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="C:\Users\Hawkwood\Code\siege_log\Handlers\" />
+    <Folder Include="Handlers\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

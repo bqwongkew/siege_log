@@ -67,7 +67,7 @@ class TableRenderer:
             result += val.rjust(size, " ") + "|"
         return result
 
-def render_sql_table(conn, sql):
+def render_sql_table(conn, sql, sql_args = []):
     renderer = TableRenderer()
-    renderer.populate(conn.cursor().execute(sql))
+    renderer.populate(conn.cursor().execute(sql, sql_args))
     return renderer.render()

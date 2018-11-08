@@ -6,8 +6,9 @@ from MapData import *
 
 from handlers.QueryHandler import *
 from handlers.ReportHandler import *
-from handlers.MapHandler import *
+from handlers.MapListHandler import *
 from handlers.InfoHandler import *
+from handlers.MapNotesHandler import *
 from handlers.HelpHandler import *
 
 # Monkey Patch User's Name + Descriminator
@@ -22,7 +23,12 @@ conn = sqlite3.connect("test.db")
 
 # Create message handlers
 handlers = [QueryHandler(conn, ["Dazer#7130", "VoidCircuit#2131"]),
-            ReportHandler(conn, MapData.maps), InfoHandler(conn), MapHandler(MapData.maps)]
+           ReportHandler(conn, MapData.maps),
+           InfoHandler(conn),
+           MapListHandler(MapData.maps),
+           MapListNotesHandler(conn, MapData.maps), 
+           MapAddNotesHandler(conn, MapData.maps), 
+           MapRemoveNotesHandler(conn, MapData.maps)]
 handlers.append(HelpHandler(handlers))
 
 @client.event

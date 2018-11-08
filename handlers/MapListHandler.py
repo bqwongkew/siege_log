@@ -1,5 +1,5 @@
 
-class MapHandler:
+class MapListHandler:
     def __init__(self, maps):
         self.maps = list(map(lambda map_item: map_item.name, maps))
 

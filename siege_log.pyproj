@@ -23,6 +23,7 @@
     <Compile Include="Handlers\HelpHandler.py" />
     <Compile Include="Handlers\InfoHandler.py" />
     <Compile Include="Handlers\MapListHandler.py" />
+    <Compile Include="Handlers\StratHandler.py" />
     <Compile Include="Handlers\ReportHandler.py" />
     <Compile Include="Handlers\MapNotesHandler.py" />
     <Compile Include="Handlers\QueryHandler.py" />
@@ -33,6 +34,9 @@
   <ItemGroup>
     <Folder Include="C:\Users\Hawkwood\Code\siege_log\Handlers\" />
     <Folder Include="Handlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="credentials.json" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
